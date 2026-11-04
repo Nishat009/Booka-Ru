@@ -1,0 +1,2 @@
+.admin-sidebar { min-height: 70vh; display: flex; flex-direction: column; gap: 8px; padding: 24px 18px; }
+@media (max-width:767px) { .admin-sidebar { min-height: auto; flex-direction: row; padding: 14px; } }

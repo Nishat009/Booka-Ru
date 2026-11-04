@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520" fill="none">
+  <defs>
+    <linearGradient id="sky" x1="78" y1="28" x2="672" y2="485" gradientUnits="userSpaceOnUse"><stop stop-color="#f8e9d5"/><stop offset="1" stop-color="#edc9cb"/></linearGradient>
+    <linearGradient id="moon" x1="492" y1="69" x2="603" y2="180" gradientUnits="userSpaceOnUse"><stop stop-color="#fff7d9"/><stop offset="1" stop-color="#f2d99d"/></linearGradient>
+    <linearGradient id="cover1" x1="204" y1="276" x2="565" y2="386" gradientUnits="userSpaceOnUse"><stop stop-color="#81334c"/><stop offset="1" stop-color="#572237"/></linearGradient>
+    <linearGradient id="cover2" x1="166" y1="342" x2="583" y2="450" gradientUnits="userSpaceOnUse"><stop stop-color="#d63850"/><stop offset="1" stop-color="#a92643"/></linearGradient>
+    <linearGradient id="cover3" x1="223" y1="404" x2="553" y2="494" gradientUnits="userSpaceOnUse"><stop stop-color="#583044"/><stop offset="1" stop-color="#351d32"/></linearGradient>
+    <filter id="shadow" x="100" y="190" width="587" height="346" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feGaussianBlur stdDeviation="13"/></filter>
+  </defs>
+  <rect width="760" height="520" rx="26" fill="url(#sky)"/>
+  <circle cx="548" cy="126" r="66" fill="url(#moon)"/>
+  <circle cx="548" cy="126" r="83" stroke="#fff6df" stroke-opacity=".45" stroke-width="2"/>
+  <path d="M0 337c95-66 174-59 260-14 72 38 130 36 201-2 105-55 194-44 299 9v190H0V337Z" fill="#9a596d" fill-opacity=".48"/>
+  <path d="M0 382c105-56 173-49 270-6 86 38 162 37 240-4 88-47 165-37 250 9v139H0V382Z" fill="#714056" fill-opacity=".55"/>
+  <g fill="#fff6d6"><path d="m124 100 4 12 12 4-12 4-4 12-4-12-12-4 12-4 4-12ZM365 70l3 9 9 3-9 3-3 9-3-9-9-3 9-3 3-9ZM671 216l3 8 8 3-8 3-3 8-3-8-8-3 8-3 3-8ZM90 260l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6Z"/></g>
+  <g fill="#f9e7b9"><circle cx="187" cy="143" r="3"/><circle cx="690" cy="86" r="3"/><circle cx="420" cy="177" r="2.5"/><circle cx="302" cy="111" r="2"/><circle cx="655" cy="282" r="2.5"/><circle cx="157" cy="209" r="2"/></g>
+  <g fill="#4b283c" opacity=".8"><path d="M88 382V323h21v59h-7v-47h-7v47h-7Zm-8-59h37v-8H80v8Zm4-9 22-14 22 14H84Zm10-15h24v-20H94v20Zm5-20v-13l6-8 6 8v13h-12Zm-19 44v-13l8-8 8 8v13H80Z"/><path d="M635 377v-66h20v66h-7v-52h-6v52h-7Zm-8-66h36v-8h-36v8Zm4-9 14-14 14 14h-28Zm7-18h14v-17h-14v17Zm3-17v-10l4-6 4 6v10h-8Z"/></g>
+  <g stroke="#e7bd80" stroke-width="2" opacity=".9"><path d="M49 444c31-17 42-36 39-59m-23 29c-17-2-26-10-29-24m43 11c15-9 19-20 17-33M699 455c-24-16-32-32-28-51m15 26c14-1 21-8 24-18m-34 9c-12-8-15-17-12-28"/><path d="M52 414c-10-5-12-12-10-19 11 3 15 8 10 19Zm26-27c-11 0-16-5-18-13 11-1 17 2 18 13Zm621 41c9-5 11-12 8-18-10 3-13 8-8 18Zm-22-27c10 0 14-5 16-12-10-1-15 2-16 12Z" fill="#e7bd80"/></g>
+  <ellipse cx="381" cy="435" rx="251" ry="72" fill="#321d2d" fill-opacity=".3" filter="url(#shadow)"/>
+  <g transform="rotate(-6 380 332)"><path d="M192 255h375l-19 122H173l19-122Z" fill="url(#cover1)" stroke="#e7bd80" stroke-width="3"/><path d="M205 268h349l-15 96H190l15-96Z" stroke="#e7bd80" stroke-opacity=".7" stroke-width="2"/><path d="M379 278c-22 19-23 36 0 61 23-25 22-42 0-61Zm0 8v44m-17-28h34" stroke="#f0d39b" stroke-width="2"/><path d="M216 320c13-19 24-19 36 0-12 18-23 18-36 0Zm287 0c13-19 24-19 36 0-12 18-23 18-36 0Z" stroke="#f0d39b" stroke-width="2"/></g>
+  <g transform="rotate(3 374 396)"><path d="M159 337h433l-17 117H142l17-117Z" fill="url(#cover2)" stroke="#f0c78a" stroke-width="3"/><path d="M174 349h402l-13 92H160l14-92Z" stroke="#f4d5a1" stroke-opacity=".8" stroke-width="2"/><path d="m373 363 8 17 19 3-14 13 4 19-17-9-17 9 4-19-14-13 19-3 8-17Z" fill="#f6d89e"/><path d="M205 395c15-22 28-22 43 0-15 21-28 21-43 0Zm296 0c15-22 28-22 43 0-15 21-28 21-43 0Z" stroke="#f6d89e" stroke-width="2"/></g>
+  <g transform="rotate(-3 384 463)"><path d="M211 420h355l-14 91H197l14-91Z" fill="url(#cover3)" stroke="#d7ae79" stroke-width="3"/><path d="M224 431h329l-11 68H213l11-68Z" stroke="#d7ae79" stroke-opacity=".75" stroke-width="2"/><path d="M383 439c-18 15-18 29 0 49 18-20 18-34 0-49Zm0 7v35m-14-22h28" stroke="#e8c68e" stroke-width="2"/><path d="M246 466c12-17 22-17 34 0-12 16-22 16-34 0Zm243 0c12-17 22-17 34 0-12 16-22 16-34 0Z" stroke="#e8c68e" stroke-width="2"/></g>
+</svg>

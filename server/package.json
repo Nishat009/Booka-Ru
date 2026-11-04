@@ -1,0 +1,26 @@
+{
+  "name": "book-shop-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "seed:catalog": "node seed-catalog.js",
+    "seed:demo": "node seed-demo-accounts.js",
+    "verify:demo-flow": "node verify-demo-flow.js",
+    "dev": "nodemon index.js",
+    "start:dev": "nodemon index",
+    "start": "node index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^7.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}

@@ -1,0 +1,33 @@
+.book-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 22px; }
+.book-card { overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); box-shadow: 0 6px 22px rgba(72,26,43,.035); transition: box-shadow .2s,transform .2s,border-color .2s; animation: card-arrive 420ms both; }
+.book-card:hover { transform: translateY(-5px); border-color: color-mix(in srgb,var(--cherry) 36%,var(--line)); box-shadow: var(--shadow); }
+.book-cover { height: 250px; display: grid; place-items: center; overflow: hidden; padding: 22px 32px; background: linear-gradient(140deg,var(--surface-muted),var(--accent-soft)); }
+.book-cover img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(5px 8px 5px rgba(35,18,20,.2)); transition: transform .35s ease; }
+.book-card:hover .book-cover img { transform: scale(1.045) rotate(-1deg); }
+.book-card-info { padding: 17px; }.book-genre { margin: 0 0 7px; overflow: hidden; color: var(--cherry); font-size: .67rem; font-weight: 700; letter-spacing: .07em; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }.book-genre span { padding: 0 4px; color: var(--muted); }
+.book-card h3 { min-height: 45px; margin: 0; color: var(--ink); font: 600 1.1rem/1.25 Georgia,'Times New Roman',serif; }.book-author { min-height: 32px; margin: 7px 0 0; overflow: hidden; color: var(--muted); font-size: .77rem; text-overflow: ellipsis; white-space: nowrap; }
+.book-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 11px; padding-top: 12px; border-top: 1px solid var(--line); }.book-price { color: var(--burgundy); font-size: .92rem; font-weight: 750; white-space: nowrap; }.book-card-footer button { padding: 9px 13px; border: 0; border-radius: 4px; background: var(--burgundy); color: #fff8ed; cursor: pointer; font-size: .75rem; font-weight: 700; transition: background .16s,transform .16s; }.book-card-footer button:hover { transform: translateY(-1px); background: var(--cherry); }
+.show-books-button { display: block; margin: 30px auto 0; padding: 12px 22px; border: 1px solid var(--burgundy); border-radius: 4px; background: transparent; color: var(--burgundy); cursor: pointer; font-weight: 700; transition: background .16s,color .16s; }.show-books-button:hover { background: var(--burgundy); color: var(--cream); }
+@keyframes card-arrive { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@media(max-width:1000px) { .book-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }.book-cover { height: 230px; padding: 20px; } }
+@media(max-width:760px) { .book-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 13px; } }
+@media(max-width:480px) { .book-cover { height: 190px; padding: 14px; }.book-card-info { padding: 12px; }.book-card h3 { font-size: .98rem; }.book-price { font-size: .83rem; }.book-card-footer button { padding: 8px 10px; font-size: .69rem; } }
+@media(prefers-reduced-motion:reduce) { .book-card,.book-cover img { animation: none; transition: none; } }
+
+/* Book jackets rest on a soft paper shelf. */
+.book-card { display: flex; flex-direction: column; border-radius: 5px; }
+.book-cover { position: relative; height: 275px; padding: 30px 38px 24px; background: radial-gradient(ellipse at 50% 30%,var(--surface),var(--surface-muted)); border-bottom: 1px solid var(--line); }
+.book-cover::before { content: ''; position: absolute; bottom: 17px; left: 12%; right: 12%; height: 1px; background: var(--line); box-shadow: 0 5px 10px rgba(72,26,43,.15); }
+.book-cover img { min-height: 0; max-height: 220px; }
+.book-badge { position: absolute; z-index: 2; top: 13px; left: 13px; padding: 5px 9px; border: 1px solid var(--line); border-radius: 3px; background: var(--surface); color: var(--burgundy); font-size: .6rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.book-card-info { flex: 1; display: flex; flex-direction: column; padding: 20px; }
+.book-card h3 { min-height: 48px; font-size: 1.15rem; line-height: 1.4; }
+.book-card-footer { margin-top: auto; }
+.book-author { margin-bottom: 12px; }
+.book-card-footer button { display: flex; align-items: center; gap: 10px; }
+@media(max-width:1000px) { .book-cover { height: 245px; padding: 28px; }.book-cover img { max-height: 195px; } }
+@media(max-width:480px) { .book-cover { height: 205px; padding: 32px 20px 22px; }.book-cover img { max-height: 150px; }.book-card-info { padding: 13px; }.book-card h3 { font-size: 1rem; }.book-card-footer { flex-wrap: wrap; row-gap: 10px; }.book-badge { top: 9px; left: 9px; font-size: .52rem; } }
+.book-cover > img { position: relative; z-index: 1; }
+
+.cover-unavailable { color: var(--muted); font-size: .8rem; text-align: center; }
+.checkout-book-cover img { width: 70px; height: 100px; object-fit: contain; }
