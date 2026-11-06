@@ -17,6 +17,7 @@ import CheckOut from './components/CheckOut/CheckOut';
 import OrderPreview from './components/OrderPreview/OrderPreview';
 import ThankYou from './components/ThankYou/ThankYou';
 import { apiRequest } from './api';
+import { MessageProvider } from './components/Messages/Messages';
 
 export const UserContext = createContext();
 
@@ -39,12 +40,18 @@ function App() {
   useEffect(() => {
     const token = window.localStorage.getItem('bookaru_session');
     if (!token) { setAuthReady(true); return; }
-    apiRequest('/auth/me', {}, { token }).then(response => response.json()).then(profile => setLoggedInUser({ ...profile, displayName: profile.name, token }))
+    apiRequest('/auth/me', {}, { token }).then(({ data: profile }) => setLoggedInUser({ ...profile, displayName: profile.name, token }))
       .catch(() => { window.localStorage.removeItem('bookaru_session'); setLoggedInUser({}); })
       .finally(() => setAuthReady(true));
   }, []);
+  useEffect(() => {
+    const signOut = () => { window.localStorage.removeItem('bookaru_session'); setLoggedInUser({}); };
+    window.addEventListener('bookaru:auth-lost', signOut);
+    return () => window.removeEventListener('bookaru:auth-lost', signOut);
+  }, []);
   return (
     <UserContext.Provider value={[loggedInUser, setLoggedInUser, authReady, theme, setTheme]}>
+      <MessageProvider>
       <Router>
         <ScrollToTop />
         <Header />
@@ -77,6 +84,7 @@ function App() {
           </Switch>
         </main>
       </Router>
+      </MessageProvider>
     </UserContext.Provider>
   );
 }

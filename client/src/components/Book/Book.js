@@ -18,7 +18,7 @@ const Book = ({ book, badge }) => {
                 <p className="book-author">by {book.author || 'Unknown author'}</p>
                 <div className="book-card-footer">
                     <span className="book-price">BDT {Number(book.price).toLocaleString('en-BD')}</span>
-                    <button type="button" onClick={() => history.push(`/checkOut/${book._id}`)} aria-label={`Buy ${book.name}`}>Buy book <span aria-hidden="true">&nearr;</span></button>
+                    <button type="button" onClick={() => history.push(`/checkOut/${book._id}`)} aria-label={`Buy ${book.name}`}>Buy book <span aria-hidden="true">→</span></button>
                 </div>
             </div>
         </article>

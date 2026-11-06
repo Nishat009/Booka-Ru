@@ -1,0 +1,98 @@
+/* Refinement layer: same palette, calmer and more classic. Flat surfaces, thin rules, serif headings, generous space. */
+body { font-family: 'Inter','Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif; line-height: 1.6; }
+.storefront { background: var(--cream); }
+
+/* Header */
+.site-header { background: var(--cream); backdrop-filter: none; }
+.site-nav { min-height: 76px; }
+.brand-mark { width: 36px; height: 36px; border-radius: 4px; box-shadow: none; font-size: 1.2rem; }
+.brand { font-size: 1.45rem; }
+.nav-links .nav-login,.theme-toggle { border-radius: 4px; }
+.nav-links .nav-current { text-decoration: none; border-bottom: 2px solid var(--cherry); padding-bottom: 4px; }
+
+/* Hero */
+.hero { min-height: 0; gap: 64px; padding: 80px 0 88px; }
+.hero-copy .eyebrow { padding: 0; border: 0; background: none; }
+.hero h1 { font-size: clamp(3rem,5.6vw,5.2rem); letter-spacing: -.04em; line-height: 1.05; }
+.hero-description { font-size: 1.05rem; }
+.primary-button,.show-books-button { border-radius: 3px; box-shadow: none; }
+.primary-button:hover { box-shadow: none; transform: none; }
+.hero-art { height: 470px; padding: 28px; border-radius: 4px; background: var(--surface-muted); box-shadow: none; }
+.hero-art::before,.hero-art-caption { display: none; }
+.featured-shelf-top { padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.featured-book-cover { transform: none; box-shadow: 0 14px 28px rgba(55,28,35,.18); }
+.featured-book-cover::after { display: none; }
+.featured-controls button { border-radius: 3px; }
+.featured-controls .slideshow-pause { border-radius: 3px; }
+
+/* Value strip */
+.store-values { padding: 20px 0; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; justify-content: center; gap: 56px; }
+.store-values b { font-size: .95rem; }
+
+/* Sections */
+.shelf-section { padding: 72px 0 24px; }
+.shelf-heading h2,.section-heading h2,.location-copy h2,.reviews-section h2 { font-weight: 400; letter-spacing: -.02em; }
+.collection-section { padding: 72px 0 80px; }
+.collection-count { padding: 0; background: none; font-size: .8rem; }
+
+/* Category tabs */
+.category-tabs { gap: 0 28px; margin-bottom: 26px; border-bottom: 1px solid var(--line); }
+.category-tabs button { padding: 12px 0; border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; color: var(--muted); }
+.category-tabs button:hover { transform: none; border-color: var(--line); }
+.category-tabs button.active { background: none; border-bottom-color: var(--cherry); color: var(--burgundy-deep); font-weight: 650; }
+.category-tabs button span { padding: 1px 7px; border-radius: 10px; background: var(--surface-muted); font-size: .65rem; opacity: 1; }
+.book-filters { padding: 0; border: 0; background: none; }
+.book-filters input,.book-filters select { border-radius: 3px; }
+
+/* Cards */
+.book-card { border-radius: 3px; border-color: var(--line); box-shadow: none; background: var(--surface); }
+.book-card:hover { transform: none; border-color: var(--burgundy); box-shadow: none; }
+.book-cover { height: 270px; background: var(--surface-muted); border-bottom: 0; }
+.book-cover::before { display: none; }
+.book-badge { border: 0; border-radius: 2px; background: var(--burgundy); color: var(--cream); }
+.book-genre { color: var(--muted); font-weight: 600; }
+.book-card h3 { font-weight: 500; }
+.book-card-footer { border-top-color: var(--line); }
+.book-card-footer button { border-radius: 3px; }
+.book-card-footer button:hover { transform: none; }
+.book-cover .cover-placeholder { width: 62%; height: 100%; max-height: 220px; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 16px 12px; border: 1px solid var(--burgundy); outline: 1px solid var(--burgundy); outline-offset: -7px; background: var(--surface); color: var(--burgundy-deep); text-align: center; box-shadow: 6px 8px 14px rgba(55,28,35,.14); }
+.cover-placeholder strong { font: 500 1rem/1.25 Georgia,serif; }
+.cover-placeholder small { color: var(--muted); font-size: .7rem; }
+.featured-book-cover .cover-placeholder { position: absolute; inset: 0; width: auto; padding: 18px; }
+.category-shelf { margin: 44px 0; }
+
+/* Reviews & footer */
+.reviews-section { padding: 56px 40px; border-radius: 3px; background: var(--surface-muted); }
+.reader-review { border-radius: 3px; border-top-width: 2px; box-shadow: none; }
+.reader-review:hover { transform: none; box-shadow: none; }
+.map-frame { border-radius: 3px; box-shadow: none; }
+.store-footer { font-size: .95rem; }
+
+/* Admin & forms */
+.admin-sidebar,.admin-order,.team-form,.review-form,.support-chat { border-radius: 4px; box-shadow: none; }
+.soft-button { border-radius: 3px; }
+
+@media(max-width:760px) {
+  .hero { padding: 44px 0 52px; gap: 36px; }
+  .hero-art { height: 420px; }
+  .store-values { gap: 14px 28px; justify-content: flex-start; }
+  .category-tabs { flex-wrap: nowrap; overflow-x: auto; gap: 0 22px; scrollbar-width: none; }
+  .category-tabs button { white-space: nowrap; }
+}
+@media(max-width:480px) { .book-cover { height: 210px; } .store-values { display: flex; width: calc(100% - 32px); } }
+
+/* Category tabs: one scrollable row at every width */
+.category-tabs { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: var(--line) transparent; padding-bottom: 2px; }
+.category-tabs::-webkit-scrollbar { height: 6px; }
+.category-tabs::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+.category-tabs button { flex: 0 0 auto; white-space: nowrap; }
+
+/* Checkout date, team status rows */
+.checkout-date { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.checkout-date label { margin: 0; font-weight: 600; }
+.checkout-date .themed-date { width: 210px; }
+.team-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.team-row .team-member { flex: 1 1 260px; }
+.team-inactive .team-member { opacity: .6; }
+.status-cancelled { background: var(--accent-soft); color: var(--cherry); }
+.team-form .themed-trigger,.review-form .themed-trigger { padding: 11px 13px; }

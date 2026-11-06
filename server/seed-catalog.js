@@ -75,6 +75,36 @@ const banglaCatalog = [
   createdAt: new Date('2025-01-03T00:00:00.000Z')
 }));
 
+
+// Books for the extra shelves. No local cover art, so the storefront shows a typographic cover.
+const extraCatalog = [
+  ['mystery-hound-baskervilles','The Hound of the Baskervilles','Arthur Conan Doyle','Mystery & Thriller','Detective',320],
+  ['mystery-murder-orient-express','Murder on the Orient Express','Agatha Christie','Mystery & Thriller','Detective',380],
+  ['mystery-girl-dragon-tattoo','The Girl with the Dragon Tattoo','Stieg Larsson','Mystery & Thriller','Crime',460],
+  ['scifi-dune','Dune','Frank Herbert','Science Fiction','Space Opera',550],
+  ['scifi-foundation','Foundation','Isaac Asimov','Science Fiction','Space Opera',420],
+  ['scifi-martian','The Martian','Andy Weir','Science Fiction','Hard Science Fiction',450],
+  ['romance-jane-eyre','Jane Eyre','Charlotte Brontë','Romance','Classic Romance',340],
+  ['romance-persuasion','Persuasion','Jane Austen','Romance','Classic Romance',310],
+  ['history-diary-young-girl','The Diary of a Young Girl','Anne Frank','History & Biography','Memoir',360],
+  ['history-sapiens','Sapiens','Yuval Noah Harari','History & Biography','World History',520],
+  ['history-long-walk-freedom','Long Walk to Freedom','Nelson Mandela','History & Biography','Autobiography',480],
+  ['selfhelp-atomic-habits','Atomic Habits','James Clear','Self-Help','Habits',450],
+  ['selfhelp-deep-work','Deep Work','Cal Newport','Self-Help','Productivity',420],
+  ['selfhelp-mans-search','Man’s Search for Meaning','Viktor E. Frankl','Self-Help','Personal Growth',340],
+  ['poetry-gitanjali','Gitanjali','Rabindranath Tagore','Poetry','Classic Poetry',260],
+  ['poetry-leaves-of-grass','Leaves of Grass','Walt Whitman','Poetry','Collected Poems',330]
+].map(([seedKey, name, author, category, genre, price]) => ({
+  seedKey, name, author, category, genre,
+  language: 'English',
+  description: `${name} by ${author}. A well-loved ${genre.toLowerCase()} title from our ${category} shelf.`,
+  imageURL: '',
+  price,
+  quantity: 8,
+  active: true,
+  createdAt: new Date('2024-12-20T00:00:00.000Z')
+}));
+
 const editorialReviews = [
   { seedKey: 'bookaru-editorial-hobbit', name: 'Booka-Ru editors', rating: 5, text: 'A cozy, generous adventure with riddles, dragons, and a wonderfully unlikely hero. A lovely place to begin a fantasy reading journey.' },
   { seedKey: 'bookaru-editorial-secret-garden', name: 'Booka-Ru editors', rating: 5, text: 'The Secret Garden turns curiosity and friendship into a quiet kind of magic. Its hopeful mood makes this a story readers return to.' },
@@ -90,12 +120,12 @@ async function seed() {
     const database = client.db(process.env.DB_NAME || 'bookDB');
     const books = database.collection('books');
     const reviews = database.collection('reviews');
-    for (const book of [...catalog, ...banglaCatalog]) {
+    for (const book of [...catalog, ...banglaCatalog, ...extraCatalog]) {
       const { imageURL, ...insertFields } = book;
       await books.updateOne({ seedKey: book.seedKey }, { $setOnInsert: insertFields, $set: { imageURL } }, { upsert: true });
     }
     for (const review of editorialReviews) await reviews.updateOne({ seedKey: review.seedKey }, { $setOnInsert: review }, { upsert: true });
-    console.log(`Catalog ready: ${catalog.length} English books, ${banglaCatalog.length} Bangla books, and ${editorialReviews.length} approved editorial reviews.`);
+    console.log(`Catalog ready: ${catalog.length} English books, ${banglaCatalog.length} Bangla books, ${extraCatalog.length} books on the new category shelves, and ${editorialReviews.length} approved editorial reviews.`);
   } finally {
     await client.close();
   }

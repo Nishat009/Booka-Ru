@@ -18,7 +18,7 @@ const CoverImage = ({ book, featured }) => {
     const [sourceIndex, setSourceIndex] = useState(0);
     const sources = getCoverSources(book);
     return <>
-        {sourceIndex >= sources.length && <span className="cover-unavailable" role="status">Cover unavailable</span>}
+        {sourceIndex >= sources.length && <span className="cover-placeholder" role="img" aria-label={`Cover of ${book.name}`}><strong>{book.name}</strong><small>{book.author}</small></span>}
         {sourceIndex < sources.length && <img src={sources[sourceIndex]} alt={`Cover of ${book.name}`} loading={featured ? 'eager' : 'lazy'} decoding="async" onError={() => setSourceIndex(current => current + 1)} onLoad={event => {
             if (event.currentTarget.naturalWidth < 10 || event.currentTarget.naturalHeight < 10) setSourceIndex(current => current + 1);
         }} />}

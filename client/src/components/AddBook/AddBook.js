@@ -1,11 +1,14 @@
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../../App';
 import { apiRequest } from '../../api';
+import { useMessages } from '../Messages/Messages';
+import { Select } from '../Fields/Fields';
+import { CATEGORY_NAMES, genresFor } from '../../categories';
 
 const AddBook = () => {
     const [user] = useContext(UserContext);
-    const [error, setError] = useState('');
-    const [saved, setSaved] = useState(false);
+    const notify = useMessages();
+    const [category, setCategory] = useState(CATEGORY_NAMES[0]);
     const onSubmit = event => {
         event.preventDefault();
         const form = event.currentTarget;
@@ -16,10 +19,9 @@ const AddBook = () => {
             price: formData.get('price'),
             quantity: formData.get('quantity')
         };
-        setError(''); setSaved(false);
         apiRequest('/books', { method: 'POST', body: JSON.stringify(bookData) }, user)
-            .then(() => { form.reset(); setSaved(true); })
-            .catch(requestError => setError(requestError.message));
+            .then(({ message }) => { form.reset(); setCategory(CATEGORY_NAMES[0]); notify.success(message); })
+            .catch(requestError => notify.error(requestError));
     }
 
     return (
@@ -39,9 +41,9 @@ const AddBook = () => {
                 <input type="number" name="price" className="form-control" id="book-price" placeholder="Enter Price" min="0" step="0.01" required />
             </div>
             <div className="col-md-6"><label htmlFor="book-author" className="form-label">Author</label><input name="author" className="form-control" id="book-author" /></div>
-            <div className="col-md-6"><label htmlFor="book-category" className="form-label">Category</label><input name="category" className="form-control" id="book-category" placeholder="Fiction" /></div>
-            <div className="col-md-6"><label htmlFor="book-genre" className="form-label">Genre</label><input name="genre" className="form-control" id="book-genre" placeholder="Mystery" /></div>
-            <div className="col-md-6"><label htmlFor="book-language" className="form-label">Language</label><input name="language" className="form-control" id="book-language" placeholder="Bangla" /></div>
+            <div className="col-md-6"><label htmlFor="book-category" className="form-label">Category</label><Select name="category" id="book-category" value={category} onChange={event => setCategory(event.target.value)}>{CATEGORY_NAMES.map(name => <option key={name} value={name}>{name}</option>)}</Select></div>
+            <div className="col-md-6"><label htmlFor="book-genre" className="form-label">Genre</label><input name="genre" className="form-control" id="book-genre" list="genre-options" placeholder={genresFor(category)[0] || 'Genre'} /><datalist id="genre-options">{genresFor(category).map(genre => <option key={genre} value={genre} />)}</datalist></div>
+            <div className="col-md-6"><label htmlFor="book-language" className="form-label">Language</label><input name="language" className="form-control" id="book-language" placeholder="English or বাংলা" /></div>
             <div className="col-md-6"><label htmlFor="book-description" className="form-label">Description</label><textarea name="description" className="form-control" id="book-description" rows="3" /></div>
 
             <div className="col-md-6">
@@ -52,7 +54,6 @@ const AddBook = () => {
             <div >
                 <input type="submit" className="mt-3 btn btn-success" />
             </div>
-            {error && <p className="text-danger" role="alert">{error}</p>}{saved && <p className="text-success" role="status">Book added to the collection.</p>}
         </form>
     </div>
     );
