@@ -47,3 +47,17 @@ The API listens on port `5500` by default. Set `REACT_APP_API_URL` in `client/.e
 
 Never commit `.env` files or MongoDB credentials.
 # Booka-Ru
+
+## Deploy on Render
+
+`render.yaml` defines two services: `booka-ru-api` (Express API) and `booka-ru` (static React site).
+
+1. Create a MongoDB Atlas cluster and allow access from anywhere (`0.0.0.0/0`), since Render's outbound IPs change.
+2. In Render, choose **New → Blueprint**, pick this repository, and fill in the prompted values:
+   - `MONGODB_URI`: the Atlas connection string.
+   - `ADMIN_EMAIL`: the email that becomes the administrator on sign-up.
+   - `REACT_APP_API_URL`: the API's public URL, e.g. `https://booka-ru-api.onrender.com` (no trailing slash).
+3. Seed the catalogue once from your machine: `MONGODB_URI="<atlas uri>" npm --prefix server run seed:catalog`.
+4. If the API URL changes, update `REACT_APP_API_URL` and redeploy the static site; the value is baked in at build time.
+
+The free API instance sleeps when idle, so the first request after a pause can take up to a minute.

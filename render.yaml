@@ -1,0 +1,54 @@
+# Render Blueprint for Booka-Ru: Express API (web service) + React storefront (static site).
+# Variables marked `sync: false` are asked for in the Render dashboard when the Blueprint is created.
+services:
+  - type: web
+    name: booka-ru-api
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      # MongoDB Atlas connection string, e.g. mongodb+srv://user:pass@cluster.mongodb.net
+      - key: MONGODB_URI
+        sync: false
+      - key: DB_NAME
+        value: bookDB
+      # Signing up with this email gives the administrator account.
+      - key: ADMIN_EMAIL
+        sync: false
+      # Demo one-click logins must stay off in production.
+      - key: ENABLE_DEMO_LOGINS
+        value: "false"
+
+  - type: web
+    name: booka-ru
+    runtime: static
+    rootDir: client
+    buildCommand: npm ci && npm run build
+    staticPublishPath: build
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # Public URL of the API service above, e.g. https://booka-ru-api.onrender.com (no trailing slash).
+      - key: REACT_APP_API_URL
+        sync: false
+      # Optional Google Maps Embed API key; the OpenStreetMap embed is used without it.
+      - key: REACT_APP_GOOGLE_MAPS_API_KEY
+        sync: false
+    routes:
+      # Single-page app: let React Router handle every path.
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /static/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
