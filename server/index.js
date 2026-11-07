@@ -5,6 +5,7 @@ const cors = require('cors');
 const { MongoClient, ObjectId } = require('mongodb');
 const crypto = require('crypto');
 const { buildInvoice } = require('./invoice');
+const { runMigrations } = require('../database/migrate');
 const { promisify } = require('util');
 const scrypt = promisify(crypto.scrypt);
 
@@ -37,6 +38,9 @@ async function startServer() {
     const client = new MongoClient(uri);
     await client.connect();
     const database = client.db(databaseName);
+    // Create collections, validators and indexes on a fresh database (database/migrations/).
+    // A failure is logged but does not stop the API, so an existing deployment keeps serving.
+    await runMigrations(database).catch(error => console.error('Database migration failed:', error.message));
     const books = database.collection('books');
     const orders = database.collection('orders');
     const users = database.collection('users');

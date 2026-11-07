@@ -1,0 +1,54 @@
+# Booka-Ru on one machine: MongoDB + API + storefront.
+#
+#   cp .env.docker.example .env      # then edit the values
+#   docker compose up -d --build
+#   docker compose exec api npm run db:seed     # optional demo data
+#
+# Storefront: http://localhost:8080   API: http://localhost:5500
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      PORT: 5500
+      MONGODB_URI: mongodb://mongo:27017
+      DB_NAME: ${DB_NAME:-bookDB}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?Set ADMIN_EMAIL in .env}
+      ENABLE_DEMO_LOGINS: "false"
+      DEMO_ADMIN_PASSWORD: ${DEMO_ADMIN_PASSWORD:-}
+      DEMO_STAFF_PASSWORD: ${DEMO_STAFF_PASSWORD:-}
+      DEMO_CUSTOMER_PASSWORD: ${DEMO_CUSTOMER_PASSWORD:-}
+    ports:
+      - "${API_PORT:-5500}:5500"
+
+  web:
+    build:
+      context: client
+      args:
+        # The browser calls the API at this address, so it must be reachable from the visitor's machine.
+        REACT_APP_API_URL: ${PUBLIC_API_URL:-http://localhost:5500}
+        REACT_APP_GOOGLE_MAPS_API_KEY: ${REACT_APP_GOOGLE_MAPS_API_KEY:-}
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "${WEB_PORT:-8080}:80"
+
+volumes:
+  mongo-data:

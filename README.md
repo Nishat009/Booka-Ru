@@ -5,7 +5,18 @@ Booka-Ru contains the React storefront and its Express/MongoDB API:
 - `client/` — React frontend
 - `server/` — Express API and MongoDB persistence
 
+- `database/` — MongoDB migrations (schema, validators, indexes) and demo seed data
+
 This is one Git repository with two application folders. Run Git commands from this project root (`Booka-Ru/`). The client and server do not have separate repositories.
+
+| Document | Contents |
+|----------|----------|
+| [HowToSetup.md](HowToSetup.md) | Install on a local machine, with Docker, on a VPS, or on Render; database setup; first admin login; branding |
+| [database/README.md](database/README.md) | Collections, indexes, migrations and seed data |
+| [CLAUDE.md](CLAUDE.md) | Architecture, folder map and conventions for AI coding tools |
+| [CHANGELOG.md](CHANGELOG.md) | Version history |
+
+**Quick start with Docker:** `cp .env.docker.example .env`, set `ADMIN_EMAIL`, then `docker compose up -d --build` and open http://localhost:8080.
 
 ## Install and run
 
@@ -14,6 +25,12 @@ From the project root, install each app's dependencies:
 ```powershell
 npm --prefix server install
 npm --prefix client install
+```
+
+Create the database schema and demo data (needs `server/.env`, see below):
+
+```powershell
+npm --prefix server run db:seed
 ```
 
 Then run the API and frontend in separate terminals:
@@ -44,6 +61,13 @@ npm --prefix client start
 New backend routes use `/books`, `/orders`, `/reviews`, `/admin/users`, and `/admin/reviews`. Legacy `/addBook`, `/buyBook`, and `/orderPreview` routes have been replaced by authenticated REST routes.
 
 The API listens on port `5500` by default. Set `REACT_APP_API_URL` in `client/.env` if the API runs at a different address. Restart the React development server after changing this value.
+
+## Tests
+
+```powershell
+npm --prefix server test
+npm --prefix client test -- --watchAll=false
+```
 
 Never commit `.env` files or MongoDB credentials.
 # Booka-Ru

@@ -1,0 +1,8 @@
+.git
+**/node_modules
+**/build
+**/.env
+**/.env.*
+!**/.env.example
+!.env.docker.example
+**/npm-debug.log*

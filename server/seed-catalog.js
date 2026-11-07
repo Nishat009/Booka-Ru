@@ -112,23 +112,29 @@ const editorialReviews = [
   { seedKey: 'bookaru-editorial-howls', name: 'Booka-Ru editors', rating: 5, text: 'A witty moving castle, a spell, and characters with room to surprise you: Howl’s Moving Castle is comfort reading with plenty of sparkle.' }
 ].map(review => ({ ...review, approved: true, editorial: true, createdAt: new Date('2025-01-02T00:00:00.000Z') }));
 
+// Idempotent: books and reviews are matched on seedKey, so running it again never duplicates data.
+async function seedCatalog(database) {
+  const books = database.collection('books');
+  const reviews = database.collection('reviews');
+  for (const book of [...catalog, ...banglaCatalog, ...extraCatalog]) {
+    const { imageURL, ...insertFields } = book;
+    await books.updateOne({ seedKey: book.seedKey }, { $setOnInsert: insertFields, $set: { imageURL } }, { upsert: true });
+  }
+  for (const review of editorialReviews) await reviews.updateOne({ seedKey: review.seedKey }, { $setOnInsert: review }, { upsert: true });
+  return `${catalog.length} English books, ${banglaCatalog.length} Bangla books, ${extraCatalog.length} books on the new category shelves, and ${editorialReviews.length} approved editorial reviews`;
+}
+
 async function seed() {
   if (!process.env.MONGODB_URI) throw new Error('MONGODB_URI must be set in server/.env.');
   const client = new MongoClient(process.env.MONGODB_URI);
   try {
     await client.connect();
-    const database = client.db(process.env.DB_NAME || 'bookDB');
-    const books = database.collection('books');
-    const reviews = database.collection('reviews');
-    for (const book of [...catalog, ...banglaCatalog, ...extraCatalog]) {
-      const { imageURL, ...insertFields } = book;
-      await books.updateOne({ seedKey: book.seedKey }, { $setOnInsert: insertFields, $set: { imageURL } }, { upsert: true });
-    }
-    for (const review of editorialReviews) await reviews.updateOne({ seedKey: review.seedKey }, { $setOnInsert: review }, { upsert: true });
-    console.log(`Catalog ready: ${catalog.length} English books, ${banglaCatalog.length} Bangla books, ${extraCatalog.length} books on the new category shelves, and ${editorialReviews.length} approved editorial reviews.`);
+    console.log(`Catalog ready: ${await seedCatalog(client.db(process.env.DB_NAME || 'bookDB'))}.`);
   } finally {
     await client.close();
   }
 }
 
-seed().catch(error => { console.error('Could not seed the catalog:', error.message); process.exitCode = 1; });
+module.exports = { seedCatalog };
+
+if (require.main === module) seed().catch(error => { console.error('Could not seed the catalog:', error.message); process.exitCode = 1; });

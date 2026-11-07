@@ -6,9 +6,11 @@ const originalFetch = global.fetch;
 beforeEach(() => {
   window.scrollTo = jest.fn();
   window.localStorage.clear();
+  // Matches the API contract: HTTP 200 with { success, message, data }.
   global.fetch = jest.fn().mockResolvedValue({
     ok: true,
-    json: async () => []
+    status: 200,
+    json: async () => ({ success: true, message: '', data: [] })
   });
 });
 

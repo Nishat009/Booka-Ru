@@ -18,3 +18,10 @@ npm-debug.log*
 yarn-debug.log*
 .DS_Store
 Thumbs.db
+
+# Old hosting caches (not used)
+.firebase/
+.firebaserc
+
+# Docker Compose environment
+/.env

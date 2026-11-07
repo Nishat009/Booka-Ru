@@ -1,29 +1,35 @@
 {
   "name": "book-shop-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Booka-Ru Express API (MongoDB)",
   "main": "index.js",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
+    "start": "node index",
+    "dev": "nodemon index.js",
+    "start:dev": "nodemon index",
+    "db:migrate": "node ../database/migrate.js",
+    "db:status": "node ../database/migrate.js --status",
+    "db:seed": "node ../database/seed.js",
     "seed:catalog": "node seed-catalog.js",
     "seed:demo": "node seed-demo-accounts.js",
     "verify:demo-flow": "node verify-demo-flow.js",
-    "dev": "nodemon index.js",
-    "start:dev": "nodemon index",
-    "start": "node index",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test \"test/**/*.test.js\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@fontsource/noto-sans": "^5.3.0",
-    "@fontsource/noto-sans-bengali": "^5.3.0",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "mongodb": "^7.7.0",
-    "pdfkit": "^0.20.2"
+    "@fontsource/noto-sans": "5.3.0",
+    "@fontsource/noto-sans-bengali": "5.3.0",
+    "cors": "2.8.5",
+    "dotenv": "16.6.1",
+    "express": "4.22.3",
+    "mongodb": "7.7.0",
+    "pdfkit": "0.20.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "nodemon": "3.1.14"
   }
 }
