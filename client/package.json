@@ -1,6 +1,6 @@
 {
   "name": "book-shop",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "private": true,
   "engines": {
     "node": ">=22"
@@ -20,7 +20,7 @@
   },
   "overrides": {
     "postcss-safe-parser": {
-      "postcss": "^8.5.31"
+      "postcss": "8.5.31"
     }
   },
   "eslintConfig": {

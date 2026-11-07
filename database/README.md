@@ -1,17 +1,45 @@
 # Database
 
-Booka-Ru stores its data in **MongoDB 7+**. MongoDB has no SQL schema file, so the schema
-lives here as versioned migration scripts that create every collection, its JSON-schema
-validator and its indexes from an empty database.
+Booka-Ru stores its data in **MongoDB 7+**. The live schema is a set of versioned migration
+scripts that create every collection, its JSON-schema validator and its indexes from an empty
+database. The same data model is also provided as portable SQL (`schema.sql`, `seed.sql`).
 
 ```
 database/
 ├── migrations/
-│   └── 001_initial_schema.js   collections, validators, indexes
+│   └── 001_initial_schema.js   collections, validators, indexes (the live schema)
 ├── migrate.js                  migration runner (also called by the API on startup)
-├── seed.js                     demo data: catalogue, demo accounts, sample activity
+├── seed.js                     demo data for MongoDB: catalogue, demo accounts, sample activity
+├── schema.sql                  the same schema as SQL tables, constraints and indexes
+├── seed.sql                    the same demo data as SQL (generated, no passwords)
+├── export-sql.js               regenerates seed.sql from server/seed-catalog.js
 └── lib.js                      loads server/.env and the MongoDB driver from server/
 ```
+
+## SQL edition (`schema.sql`, `seed.sql`)
+
+`schema.sql` creates the whole data model from scratch in PostgreSQL 13+ or SQLite 3.35+:
+9 tables with primary keys, foreign keys, `NOT NULL`/`CHECK`/`UNIQUE` constraints matching the
+MongoDB validators, and the same indexes. `seed.sql` loads the demo data. Both are idempotent.
+
+```bash
+createdb bookaru && psql -d bookaru -f database/schema.sql -f database/seed.sql
+sqlite3 bookaru.db < database/schema.sql && sqlite3 bookaru.db < database/seed.sql
+```
+
+| MongoDB | SQL |
+|---------|-----|
+| collection `orderMessages`, `_migrations` | table `order_messages`, `schema_migrations` |
+| camelCase field (`passwordHash`, `imageURL`) | snake_case column (`password_hash`, `image_url`) |
+| `_id` ObjectId | `id CHAR(24)` (same hex string the API returns) |
+| `users.permissions[]` | table `user_permissions (user_id, permission)` |
+| `orders.supportStaff { uid, email, name }` | `support_staff_id`, `support_staff_email`, `support_staff_name` |
+| TTL index on `sessions.expiresAt` | index on `expires_at`; delete expired rows with a scheduled job |
+
+The demo accounts in `seed.sql` are locked (`password_hash = '!'` is not a valid scrypt hash),
+so the file holds no credentials. After changing `server/seed-catalog.js`, run
+`npm --prefix server run db:sql` to regenerate `seed.sql`. `server/test/sql.test.js` fails if
+`schema.sql` misses a MongoDB field or `seed.sql` is out of date, and loads both into SQLite.
 
 ## Commands
 
@@ -23,6 +51,10 @@ so run `npm --prefix server ci` first.
 | `npm --prefix server run db:migrate` | Apply pending migrations |
 | `npm --prefix server run db:status` | Show applied / pending migrations |
 | `npm --prefix server run db:seed` | Migrate, then load demo data (idempotent) |
+| `npm --prefix server run db:sql` | Regenerate `seed.sql` from the catalogue |
+
+Set `SEED_CATALOG_IF_EMPTY=true` on the API to load the starter catalogue automatically when the
+database has no books (used by the Render Blueprint and Docker Compose).
 
 Connection settings come from `server/.env` (`MONGODB_URI`, `DB_NAME`) or the environment.
 

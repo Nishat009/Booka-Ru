@@ -135,6 +135,9 @@ async function seed() {
   }
 }
 
-module.exports = { seedCatalog };
+// catalogBooks and editorialReviews are also read by database/export-sql.js to build database/seed.sql.
+const catalogBooks = [...catalog, ...banglaCatalog, ...extraCatalog];
+
+module.exports = { seedCatalog, catalogBooks, editorialReviews };
 
 if (require.main === module) seed().catch(error => { console.error('Could not seed the catalog:', error.message); process.exitCode = 1; });

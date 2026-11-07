@@ -48,6 +48,7 @@ Edit `server/.env`:
 | `DB_NAME` | `bookDB` | Database name |
 | `ADMIN_EMAIL` | `you@yourshop.com` | This email becomes the administrator |
 | `ENABLE_DEMO_LOGINS` | `false` | `true` shows one-click demo logins (development only) |
+| `SEED_CATALOG_IF_EMPTY` | `false` | `true` loads the 51-book starter catalogue on start when the database has no books |
 | `DEMO_*_PASSWORD` | your own values | Only for the demo seed. 8+ characters with a number |
 
 `client/.env` only needs `REACT_APP_API_URL=http://localhost:5500`.
@@ -239,7 +240,28 @@ npm --prefix client ci && npm --prefix client run build
 
 ## 4. Render
 
-`render.yaml` is a Render Blueprint for the API and the static storefront. See the "Deploy on Render" section in `client/README.md`. In short: create a MongoDB Atlas cluster, choose **New → Blueprint** in Render, fill in `MONGODB_URI`, `ADMIN_EMAIL` and `REACT_APP_API_URL`, then seed once from your machine with `MONGODB_URI="<atlas uri>" npm --prefix server run seed:catalog`.
+`render.yaml` is a Render Blueprint with two services: `booka-ru-api` (Express API) and `booka-ru` (static React site).
+
+1. Create a free MongoDB Atlas cluster. Under **Network Access** allow `0.0.0.0/0` (Render's outbound IPs change). Create a database user and copy the connection string.
+2. In Render choose **New → Blueprint**, pick this repository, and fill in the prompted values:
+   - `MONGODB_URI` — the Atlas connection string.
+   - `ADMIN_EMAIL` — the email that becomes the administrator on sign-up.
+   - `REACT_APP_API_URL` — the API's public URL, e.g. `https://booka-ru-api.onrender.com` (no trailing slash).
+   - `REACT_APP_GOOGLE_MAPS_API_KEY` — optional; leave empty for OpenStreetMap.
+3. Deploy. On its first start the API creates the collections and indexes, and — because the Blueprint sets `SEED_CATALOG_IF_EMPTY=true` — loads the 51-book starter catalogue into the empty database. Set it to `false` if you want to start with an empty shop.
+4. Open the storefront and sign up with `ADMIN_EMAIL` to become the administrator.
+
+Already deployed the API by hand? Add `SEED_CATALOG_IF_EMPTY=true` under **Environment** and redeploy, or seed once from your machine: `MONGODB_URI="<atlas uri>" npm --prefix server run seed:catalog`.
+
+If the API URL changes, update `REACT_APP_API_URL` and redeploy the static site — the value is baked in at build time. The free API instance sleeps when idle, so the first request after a pause can take up to a minute.
+
+### Storefront on Vercel (optional)
+
+The storefront can also be hosted on Vercel, using the API on Render:
+
+1. **Add New → Project**, import the repository, set **Root Directory** to `client` (framework preset *Create React App* is detected).
+2. Add the environment variable `REACT_APP_API_URL=https://booka-ru-api.onrender.com`.
+3. Deploy. Vercel serves `index.html` for client-side routes such as `/login` automatically.
 
 ---
 
@@ -257,6 +279,16 @@ Booka-Ru uses **MongoDB**, so the schema is a set of migration scripts instead o
 The API also applies pending migrations every time it starts, so a brand-new empty database works without any manual step.
 
 Collections: `users`, `sessions`, `books`, `orders`, `orderMessages`, `reviews`, `popups` (plus `_migrations`, which records applied migrations). The full field list is in [database/README.md](database/README.md).
+
+**SQL edition.** [`database/schema.sql`](database/schema.sql) and [`database/seed.sql`](database/seed.sql) describe the same tables, constraints, indexes and demo data in portable SQL (PostgreSQL 13+ or SQLite 3.35+). The app itself does not use them; they are for reviewing the data model, reporting, or loading the data into a relational database:
+
+```bash
+createdb bookaru && psql -d bookaru -f database/schema.sql -f database/seed.sql
+# or
+sqlite3 bookaru.db < database/schema.sql && sqlite3 bookaru.db < database/seed.sql
+```
+
+`seed.sql` is generated from the catalogue with `npm --prefix server run db:sql`; the demo accounts in it are locked and contain no passwords.
 
 ---
 

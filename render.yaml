@@ -26,6 +26,10 @@ services:
       # Demo one-click logins must stay off in production.
       - key: ENABLE_DEMO_LOGINS
         value: "false"
+      # Load the 51-book starter catalogue on start when the database has no books yet.
+      # It never changes a catalogue that already has books.
+      - key: SEED_CATALOG_IF_EMPTY
+        value: "true"
 
   - type: web
     name: booka-ru

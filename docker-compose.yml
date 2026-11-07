@@ -31,6 +31,8 @@ services:
       DB_NAME: ${DB_NAME:-bookDB}
       ADMIN_EMAIL: ${ADMIN_EMAIL:?Set ADMIN_EMAIL in .env}
       ENABLE_DEMO_LOGINS: "false"
+      # A fresh volume starts with the starter catalogue; an existing catalogue is never changed.
+      SEED_CATALOG_IF_EMPTY: ${SEED_CATALOG_IF_EMPTY:-true}
       DEMO_ADMIN_PASSWORD: ${DEMO_ADMIN_PASSWORD:-}
       DEMO_STAFF_PASSWORD: ${DEMO_STAFF_PASSWORD:-}
       DEMO_CUSTOMER_PASSWORD: ${DEMO_CUSTOMER_PASSWORD:-}

@@ -4,6 +4,34 @@ All notable changes to Booka-Ru are listed here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [1.0.3] — 2026-11-07
+
+### Added
+- `database/schema.sql`: the full data model as portable SQL (PostgreSQL 13+ / SQLite 3.35+) —
+  9 tables with primary and foreign keys, `NOT NULL`/`CHECK`/`UNIQUE` constraints matching the
+  MongoDB validators, and the same indexes. Creates the database from scratch; idempotent.
+- `database/seed.sql`: the demo data as SQL (51 books, 5 reviews, locked demo accounts, a
+  sample order with support chat, a welcome pop-up). Generated from `server/seed-catalog.js` by
+  `database/export-sql.js` (`npm --prefix server run db:sql`); contains no passwords.
+- `server/test/sql.test.js`: `schema.sql` must cover every MongoDB field and enum, `seed.sql`
+  must be current, and both must load into SQLite twice with valid foreign keys.
+- `SEED_CATALOG_IF_EMPTY`: when `true`, the API loads the starter catalogue on start if the
+  database has no books. Enabled in the Render Blueprint and Docker Compose, so a fresh
+  deployment never shows an empty shop. An existing catalogue is never changed.
+- `server/README.md`: API reference — every endpoint with its permission, body and error codes.
+- HowToSetup: complete Render steps and storefront hosting on Vercel.
+
+### Changed
+- `client/README.md` rewritten (pages, structure, environment, deployment); it previously
+  described an old Firebase deployment.
+- README: Vercel storefront in the live-demo list, documentation index, database file table.
+- The `postcss` override in `client/package.json` is pinned to an exact version (8.5.31).
+- Client and server package versions set to 1.0.3.
+
+### Fixed
+- README said passwords are bcrypt-hashed; they are hashed with scrypt.
+- HowToSetup pointed to a Render section in `client/README.md` that did not exist.
+
 ## [1.0.1] — 2026-11-07
 
 ### Added

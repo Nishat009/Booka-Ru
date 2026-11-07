@@ -6,6 +6,7 @@ const { MongoClient, ObjectId } = require('mongodb');
 const crypto = require('crypto');
 const { buildInvoice } = require('./invoice');
 const { runMigrations } = require('../database/migrate');
+const { seedCatalog } = require('./seed-catalog');
 const { promisify } = require('util');
 const scrypt = promisify(crypto.scrypt);
 
@@ -41,6 +42,13 @@ async function startServer() {
     // Create collections, validators and indexes on a fresh database (database/migrations/).
     // A failure is logged but does not stop the API, so an existing deployment keeps serving.
     await runMigrations(database).catch(error => console.error('Database migration failed:', error.message));
+    // Opt-in for demo deployments: load the starter catalogue when the shop has no books at all,
+    // so a fresh database never shows an empty storefront. Never touches a catalogue that has books.
+    if (process.env.SEED_CATALOG_IF_EMPTY === 'true' && await database.collection('books').countDocuments({}, { limit: 1 }) === 0) {
+        await seedCatalog(database)
+            .then(summary => console.log(`Empty catalogue: loaded ${summary}.`))
+            .catch(error => console.error('Starter catalogue seed failed:', error.message));
+    }
     const books = database.collection('books');
     const orders = database.collection('orders');
     const users = database.collection('users');

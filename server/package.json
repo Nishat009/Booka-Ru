@@ -1,6 +1,6 @@
 {
   "name": "book-shop-server",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Booka-Ru Express API (MongoDB)",
   "main": "index.js",
   "engines": {
@@ -13,6 +13,7 @@
     "db:migrate": "node ../database/migrate.js",
     "db:status": "node ../database/migrate.js --status",
     "db:seed": "node ../database/seed.js",
+    "db:sql": "node ../database/export-sql.js",
     "seed:catalog": "node seed-catalog.js",
     "seed:demo": "node seed-demo-accounts.js",
     "verify:demo-flow": "node verify-demo-flow.js",
