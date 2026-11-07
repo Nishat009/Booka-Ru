@@ -4,8 +4,28 @@ Booka-Ru contains the React storefront and its Express/MongoDB API:
 
 - `client/` — React frontend
 - `server/` — Express API and MongoDB persistence
-
 - `database/` — MongoDB migrations (schema, validators, indexes) and demo seed data
+
+## Live demo
+
+- Storefront: https://booka-ru.onrender.com
+- API: https://booka-ru-api.onrender.com
+
+Both run on Render's free plan, so the first request after a quiet period can take up to a
+minute while the API wakes up. Anyone can register a customer account on the storefront.
+One-click demo logins are switched off in production; admin and staff credentials for
+reviewers are shared privately, never in this repository.
+
+## Database (MongoDB — no `.sql` files)
+
+Booka-Ru uses MongoDB, so the schema and demo data are JavaScript scripts rather than SQL:
+
+| Usually | Here |
+|---------|------|
+| `database/schema.sql` | [`database/migrations/`](database/migrations) — collections, validators and indexes, created from an empty database |
+| `database/seed.sql` | [`database/seed.js`](database/seed.js) — idempotent demo catalogue, accounts and sample orders |
+
+Run them with `npm --prefix server run db:migrate` and `npm --prefix server run db:seed`.
 
 This is one Git repository with two application folders. Run Git commands from this project root (`Booka-Ru/`). The client and server do not have separate repositories.
 

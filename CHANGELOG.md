@@ -7,6 +7,7 @@ All notable changes to Booka-Ru are listed here. The format follows
 ## [1.0.1] — 2026-11-07
 
 ### Added
+- README: live demo links and where the MongoDB schema and seed live (no `.sql` files).
 - `database/` with a migration runner, `001_initial_schema` (collections, JSON-schema
   validators, indexes including a unique login email and a TTL index that removes expired
   sessions) and a demo seed (`db:migrate`, `db:status`, `db:seed` scripts).
