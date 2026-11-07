@@ -10,7 +10,11 @@ const emptyBook = { name: '', author: '', category: '', genre: '', language: '',
 function ManageBook() {
     const [user] = useContext(UserContext); const [books, setBooks] = useState([]); const [editing, setEditing] = useState(null); const [removing, setRemoving] = useState(null); const notify = useMessages();
     const load = async () => { const { data } = await apiRequest('/books'); setBooks(data); };
-    useEffect(() => { load().catch(error => notify.error(error)); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, []);
+    useEffect(() => {
+        load().catch(error => notify.error(error));
+        // Load once on mount; `load` and `notify` are recreated every render.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     const submit = async event => { event.preventDefault(); const data = Object.fromEntries(new FormData(event.currentTarget)); try { const { message } = await apiRequest(`/books/${editing._id}`, { method: 'PUT', body: JSON.stringify(data) }, user); setEditing(null); notify.success(message); load(); } catch (error) { notify.error(error); } };
     const remove = async book => { try { const { message } = await apiRequest(`/books/${book._id}`, { method: 'DELETE' }, user); notify.success(message); load(); } catch (error) { notify.error(error); } finally { setRemoving(null); } };
     return <div className="book-management"><p>{books.length} books in the catalogue</p>

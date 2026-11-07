@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import './Fields.css';
 
 // Closes a popover when the user clicks elsewhere or presses Escape.
@@ -19,6 +19,7 @@ const textOf = node => React.Children.toArray(node).map(child => typeof child ==
 export function Select({ children, name, value, defaultValue, onChange, id, className = '', disabled, 'aria-label': ariaLabel }) {
     const options = React.Children.toArray(children).filter(child => child?.type === 'option')
         .map(child => ({ value: String(child.props.value ?? textOf(child.props.children)), label: textOf(child.props.children) }));
+    const listId = useId();
     const [inner, setInner] = useState(String(defaultValue ?? options[0]?.value ?? ''));
     const current = value !== undefined ? String(value) : inner;
     const [open, setOpen] = useState(false);
@@ -43,11 +44,11 @@ export function Select({ children, name, value, defaultValue, onChange, id, clas
     };
     return <div className={`themed-select ${className}`} ref={rootRef}>
         {name && <input type="hidden" name={name} value={current} />}
-        <button type="button" id={id} className="themed-trigger" role="combobox" aria-haspopup="listbox" aria-expanded={open} aria-label={ariaLabel} disabled={disabled}
+        <button type="button" id={id} className="themed-trigger" role="combobox" aria-haspopup="listbox" aria-controls={listId} aria-expanded={open} aria-label={ariaLabel} disabled={disabled}
             onClick={() => (open ? close() : openList())} onKeyDown={onKeyDown}>
             <span>{selected?.label ?? ''}</span><i aria-hidden="true" />
         </button>
-        {open && <ul className="themed-list" role="listbox">
+        {open && <ul id={listId} className="themed-list" role="listbox">
             {options.map((option, index) => <li key={option.value} role="option" aria-selected={option.value === current}
                 className={`${option.value === current ? 'chosen' : ''} ${index === active ? 'active' : ''}`}
                 onMouseEnter={() => setActive(index)} onMouseDown={event => { event.preventDefault(); choose(option); }}>{option.label}</li>)}
