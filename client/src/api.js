@@ -1,4 +1,5 @@
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5500';
+// REACT_APP_API_URL wins when set; otherwise production builds use the deployed Render API.
+const API_URL = (process.env.REACT_APP_API_URL || (process.env.NODE_ENV === 'production' ? 'https://booka-ru-api.onrender.com' : 'http://localhost:5500')).replace(/\/+$/, '');
 const AUTH_CODES = ['AUTH_REQUIRED', 'SESSION_EXPIRED', 'ACCOUNT_NOT_FOUND', 'ACCOUNT_DEACTIVATED'];
 
 // Backend contract: success is always HTTP 200 { success, message, data }; failure is HTTP 422 { success, errors: [{ code, message, field? }] }.
