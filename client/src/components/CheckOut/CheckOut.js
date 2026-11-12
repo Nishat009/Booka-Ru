@@ -71,7 +71,7 @@ const CheckOut = () => {
 
                 <button onClick={() => setConfirming(true)} disabled={!book._id || Number(book.quantity) < 1 || !address.trim()} className="btn btn-primary">Place order</button>
 
-                <Link to="/" className="m-3">
+                <Link to="/home" className="m-3">
                     <button className="btn btn-info">More One</button>
                 </Link>
 

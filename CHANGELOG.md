@@ -4,6 +4,14 @@ All notable changes to Booka-Ru are listed here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- Landing page at `/` (hero, key features, screenshots, benefits, Live Demo button); the shop moved to `/home`.
+- One-click Admin / Staff / Customer buttons on the login page, with role descriptions.
+- `DEMO_MODE` (API) and `REACT_APP_DEMO_LOGINS` (client build): explicit opt-in so a public demo deployment can use the demo buttons; off by default.
+- `docs/covers/`: four 1280x720 marketplace cover images.
+
 ## [1.0.3] — 2026-11-07
 
 ### Added

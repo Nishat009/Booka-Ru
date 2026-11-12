@@ -107,7 +107,8 @@ Before finishing a change, run both test suites and the client build with `CI=tr
   `server/.env.example`, `client/.env.example`, `.env.docker.example`.
 - Demo passwords come only from `DEMO_*_PASSWORD` env vars.
 - `ENABLE_DEMO_LOGINS` must stay `false` in production (the API also refuses when
-  `NODE_ENV=production`).
+  `NODE_ENV=production`). The only exception is a public review/demo deployment that sets
+  `DEMO_MODE=true` (API) and `REACT_APP_DEMO_LOGINS=true` (client build). Never set either on a real shop.
 
 ## Dependencies
 

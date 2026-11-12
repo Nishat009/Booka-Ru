@@ -121,7 +121,9 @@ async function startServer() {
         ok(res, await startSession(user));
     }));
     app.post('/auth/demo-login/:role', asyncHandler(async (req, res) => {
-        if (process.env.NODE_ENV === 'production' || process.env.ENABLE_DEMO_LOGINS !== 'true')
+        // DEMO_MODE=true is the explicit opt-in for a public review/demo deployment; ENABLE_DEMO_LOGINS only works outside production.
+        const demoAllowed = process.env.DEMO_MODE === 'true' || (process.env.NODE_ENV !== 'production' && process.env.ENABLE_DEMO_LOGINS === 'true');
+        if (!demoAllowed)
             return fail(res, err('DEMO_DISABLED', 'Demo sign-in is not enabled.'));
         const profiles = {
             admin: { email: adminEmail },

@@ -5,6 +5,14 @@ import './Login.css';
 import { apiRequest } from '../../api';
 import { useMessages } from '../Messages/Messages';
 
+// Buttons show in development, or in any build made with REACT_APP_DEMO_LOGINS=true (a demo deployment).
+const showDemoLogins = process.env.NODE_ENV !== 'production' || process.env.REACT_APP_DEMO_LOGINS === 'true';
+const DEMO_ROLES = [
+    ['admin', 'Admin', 'Full control: books, orders, reviews, pop-ups, staff'],
+    ['staff', 'Staff', 'Team desk with limited permissions'],
+    ['customer', 'Customer', 'Browse, order and chat about an order']
+];
+
 const Login = () => {
     const [newUser, setNewUser] = useState(false);
     const [demoLoginRole, setDemoLoginRole] = useState('');
@@ -19,7 +27,7 @@ const Login = () => {
     const notify = useMessages();
     const history = useHistory();
     const location = useLocation();
-    const from = location.state?.from || { pathname: '/' };
+    const from = location.state?.from || { pathname: '/home' };
 
     const handleChange = event => {
         setUser(current => ({
@@ -66,7 +74,7 @@ const Login = () => {
     return (
         <div className="auth-page">
             <aside className="auth-story">
-                <Link to="/" className="auth-back"><span aria-hidden="true">←</span> Back to the bookshop</Link>
+                <Link to="/home" className="auth-back"><span aria-hidden="true">←</span> Back to the bookshop</Link>
                 <div><p className="auth-story-kicker">YOUR NEXT CHAPTER STARTS HERE</p>
                 <h2>A little escape.<br />A whole new <em>world.</em></h2>
                 <p>Your favorite stories, your next discovery, and a shelf that feels like you.</p></div>
@@ -115,11 +123,11 @@ const Login = () => {
                         {newUser ? 'Sign in' : 'Create an account'}
                     </button>
                 </p>
-                {!newUser && process.env.NODE_ENV !== 'production' && <section className="demo-login" aria-label="Demo profiles">
-                    <p>ডেমো প্রোফাইলে দ্রুত প্রবেশ</p>
+                {!newUser && showDemoLogins && <section className="demo-login" aria-label="Demo profiles">
+                    <p>Try the demo — one click, no password</p>
                     <div className="demo-login-buttons">
-                        {[['admin', 'অ্যাডমিন হিসেবে প্রবেশ'], ['staff', 'স্টাফ হিসেবে প্রবেশ'], ['customer', 'কাস্টমার হিসেবে প্রবেশ']].map(([role, label]) => <button key={role} type="button" disabled={Boolean(demoLoginRole)} onClick={() => handleDemoLogin(role)}>
-                            {demoLoginRole === role ? 'প্রবেশ করা হচ্ছে…' : label}
+                        {DEMO_ROLES.map(([role, label, hint]) => <button key={role} type="button" disabled={Boolean(demoLoginRole)} onClick={() => handleDemoLogin(role)}>
+                            <strong>{demoLoginRole === role ? 'Signing in…' : `Sign in as ${label}`}</strong><small>{hint}</small>
                         </button>)}
                     </div>
                 </section>}

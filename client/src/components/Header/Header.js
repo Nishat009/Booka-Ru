@@ -22,8 +22,8 @@ const Header = () => {
                     <span>Booka-Ru</span>
                 </Link>
                 <div className="nav-links">
-                    <NavLink exact to="/" activeClassName="nav-current">Discover</NavLink>
-                    <Link className="nav-collection" to="/#book-collection" onClick={() => window.setTimeout(() => document.getElementById('book-collection')?.scrollIntoView({ behavior: 'smooth' }), 0)}>The collection</Link>
+                    <NavLink exact to="/home" activeClassName="nav-current">Discover</NavLink>
+                    <Link className="nav-collection" to="/home#book-collection" onClick={() => window.setTimeout(() => document.getElementById('book-collection')?.scrollIntoView({ behavior: 'smooth' }), 0)}>The collection</Link>
                     <button className="theme-toggle" type="button" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}><span aria-hidden="true">{theme === 'dark' ? '☀' : '☾'}</span><span className="theme-toggle-label">{theme === 'dark' ? 'Light' : 'Dark'}</span></button>
                     {loggedInUser.email && <Link to="/orderPreview">My orders</Link>}
                     {loggedInUser.role === 'admin' || loggedInUser.role === 'staff' ? <Link to="/admin/orders">Team desk</Link> : null}

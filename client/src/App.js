@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import Header from './components/Header/Header';
 import Home from './components/Home/Home';
+import Landing from './components/Landing/Landing';
 import Login from './components/Login/Login';
 import NotFound from './components/noMatch/noMatch';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
@@ -57,7 +58,10 @@ function App() {
         <Header />
         <main>
           <Switch>
-            <Route path={["/home", "/"]} exact>
+            <Route path="/" exact>
+              <Landing />
+            </Route>
+            <Route path="/home" exact>
               <Home />
             </Route>
             <PrivateRoute path={["/admin", "/admin/:section", "/addBook", "/manageBook"]} staff>
