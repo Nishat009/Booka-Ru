@@ -39,11 +39,7 @@ async function startServer() {
     const client = new MongoClient(uri);
     await client.connect();
     const database = client.db(databaseName);
-    // Create collections, validators and indexes on a fresh database (database/migrations/).
-    // A failure is logged but does not stop the API, so an existing deployment keeps serving.
     await runMigrations(database).catch(error => console.error('Database migration failed:', error.message));
-    // Opt-in for demo deployments: load the starter catalogue when the shop has no books at all,
-    // so a fresh database never shows an empty storefront. Never touches a catalogue that has books.
     if (process.env.SEED_CATALOG_IF_EMPTY === 'true' && await database.collection('books').countDocuments({}, { limit: 1 }) === 0) {
         await seedCatalog(database)
             .then(summary => console.log(`Empty catalogue: loaded ${summary}.`))
