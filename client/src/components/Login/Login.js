@@ -20,8 +20,6 @@ const Login = () => {
         name: '',
         email: '',
         password: '',
-        error: '',
-        success: false
     });
     const [, setLoggedInUser] = useContext(UserContext);
     const notify = useMessages();
@@ -33,8 +31,6 @@ const Login = () => {
         setUser(current => ({
             ...current,
             [event.target.name]: event.target.value,
-            error: '',
-            success: false
         }));
     };
 
@@ -48,7 +44,6 @@ const Login = () => {
             if (newUser) account = (await apiRequest('/auth/login', { method: 'POST', body: JSON.stringify({ email: user.email, password: user.password }) })).data;
             window.localStorage.setItem('bookaru_session', account.token);
             setLoggedInUser({ ...account.user, displayName: account.user.name, token: account.token });
-            setUser(current => ({ ...current, error: '', success: true }));
             history.replace(from);
         } catch (error) {
             notify.error(error);
@@ -57,7 +52,6 @@ const Login = () => {
 
     const handleDemoLogin = async role => {
         setDemoLoginRole(role);
-        setUser(current => ({ ...current, error: '', success: false }));
         try {
             const response = await apiRequest(`/auth/demo-login/${role}`, { method: 'POST' });
             const account = response.data;
@@ -111,14 +105,12 @@ const Login = () => {
                     />
                 </label>
 
-                {user.error && <p className="auth-error" role="alert">{user.error}</p>}
-                {user.success && <p className="auth-success" role="status">Your account is ready.</p>}
                 <button className="auth-submit" type="submit" disabled={Boolean(demoLoginRole)}>{newUser ? 'Create account' : 'Sign in'}</button>
                 <p className="auth-switch">
                     {newUser ? 'Already have an account?' : 'New to Booka-Ru?'}
                     <button type="button" onClick={() => {
                         setNewUser(current => !current);
-                        setUser(current => ({ ...current, error: '', success: false }));
+                        setUser(current => ({ ...current }));
                     }}>
                         {newUser ? 'Sign in' : 'Create an account'}
                     </button>

@@ -83,7 +83,6 @@ async function startServer() {
     };
     const adminOnly = (req, res, next) => req.user?.role === 'admin' ? next() : fail(res, err('ADMIN_ONLY', 'Only an administrator can do that.'));
     const validId = value => ObjectId.isValid(value);
-    const publicBook = book => ({ ...book, _id: String(book._id) });
     const withId = doc => ({ ...doc, _id: String(doc._id) });
     const hasText = value => String(value ?? '').trim().length > 0;
     const isPassword = value => value.length >= 8 && /[0-9]/.test(value);
@@ -144,12 +143,12 @@ async function startServer() {
         if (req.query.genre) query.genre = req.query.genre;
         if (req.query.language) query.language = req.query.language;
         if (req.query.q) query.name = { $regex: String(req.query.q).slice(0, 80), $options: 'i' };
-        ok(res, (await books.find(query).sort({ createdAt: -1 }).toArray()).map(publicBook));
+        ok(res, (await books.find(query).sort({ createdAt: -1 }).toArray()).map(withId));
     }));
     app.get('/books/:id', asyncHandler(async (req, res) => {
         if (!validId(req.params.id)) return fail(res, err('BOOK_ID_INVALID', 'Invalid book ID.'));
         const book = await books.findOne({ _id: new ObjectId(req.params.id), active: { $ne: false } });
-        return book ? ok(res, publicBook(book)) : fail(res, err('BOOK_NOT_FOUND', 'Book not found.'));
+        return book ? ok(res, withId(book)) : fail(res, err('BOOK_NOT_FOUND', 'Book not found.'));
     }));
     const bookErrors = body => {
         const errors = [];

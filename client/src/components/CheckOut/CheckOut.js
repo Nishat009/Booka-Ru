@@ -67,12 +67,12 @@ const CheckOut = () => {
                 </tbody>
             </table>
             <div className="checkout-fields"><label>Copies<input type="number" min="1" max={book.quantity} value={orderQuantity} onChange={event => setOrderQuantity(event.target.value)} /></label><label>Delivery address<textarea value={address} onChange={event => setAddress(event.target.value)} required rows="2" /></label></div>
-            <div style={{ float: 'right' }} >
+            <div className="checkout-actions">
 
                 <button onClick={() => setConfirming(true)} disabled={!book._id || Number(book.quantity) < 1 || !address.trim()} className="btn btn-primary">Place order</button>
 
                 <Link to="/home" className="m-3">
-                    <button className="btn btn-info">More One</button>
+                    <button className="btn btn-info">More books</button>
                 </Link>
 
                 <Link to="/orderPreview">

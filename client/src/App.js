@@ -16,7 +16,6 @@ import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import Admin from './components/Admin/Admin';
 import CheckOut from './components/CheckOut/CheckOut';
 import OrderPreview from './components/OrderPreview/OrderPreview';
-import ThankYou from './components/ThankYou/ThankYou';
 import { apiRequest } from './api';
 import { MessageProvider } from './components/Messages/Messages';
 
@@ -78,9 +77,6 @@ function App() {
             </PrivateRoute>
             <PrivateRoute path="/orderPreview">
               <OrderPreview />
-            </PrivateRoute>
-            <PrivateRoute path="/thank">
-              <ThankYou />
             </PrivateRoute>
             <Route path="*">
               <NotFound />
