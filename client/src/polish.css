@@ -152,7 +152,7 @@ body { font-family: var(--font-body); }
 .auth-field input:focus { outline: 0; border-color: var(--cherry); box-shadow: 0 0 0 4px color-mix(in srgb, var(--cherry) 14%, transparent); }
 .auth-submit { border-radius: 999px; box-shadow: 0 10px 22px color-mix(in srgb, var(--burgundy) 24%, transparent); }
 .demo-login > p { font-weight: 500; font-size: .84rem; }
-.demo-login-buttons { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.demo-login-buttons { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
 .demo-login-buttons button { min-height: 44px; padding: 8px 10px; border-radius: 12px; background: var(--surface); font-size: .86rem; font-weight: 500; }
 .demo-login-buttons button:hover:not(:disabled) { background: var(--accent-soft); }
 

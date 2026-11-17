@@ -22,6 +22,7 @@ npm test                   # node:test, no database needed
 | `ADMIN_EMAIL` | yes | The account with this email is the administrator |
 | `NODE_ENV` | production | `production` always disables demo logins |
 | `ENABLE_DEMO_LOGINS` | no (`false`) | One-click demo logins, development only |
+| `DEMO_MODE` | no (`false`) | Public review/demo deployment only: one-click demo logins even in production; missing demo accounts are created on start |
 | `SEED_CATALOG_IF_EMPTY` | no (`false`) | Load the starter catalogue on start when there are no books |
 | `DEMO_ADMIN_PASSWORD`, `DEMO_STAFF_PASSWORD`, `DEMO_CUSTOMER_PASSWORD` | demo only | Passwords for `npm run seed:demo` / `db:seed` |
 
@@ -84,7 +85,8 @@ permission required (the administrator always passes).
 | GET | `/` | public | | Health check |
 | POST | `/auth/register` | public | `name`, `email`, `password` | Creates a customer. `NAME_REQUIRED`, `EMAIL_INVALID`, `PASSWORD_WEAK`, `EMAIL_TAKEN` |
 | POST | `/auth/login` | public | `email`, `password` | `INVALID_CREDENTIALS`, `ACCOUNT_DEACTIVATED` |
-| POST | `/auth/demo-login/:role` | public | | `admin`/`staff`/`customer`; only when `ENABLE_DEMO_LOGINS=true` and not production (`DEMO_DISABLED`) |
+| GET | `/auth/demo` | public | | `{ enabled, roles }` — whether the login screens show the demo buttons |
+| POST | `/auth/demo-login/:role` | public | | `admin`/`staff`/`customer`; only when `DEMO_MODE=true`, or `ENABLE_DEMO_LOGINS=true` outside production (`DEMO_DISABLED`) |
 | GET | `/auth/me` | signed in | | Current account |
 | POST | `/auth/logout` | signed in | | Ends this session |
 

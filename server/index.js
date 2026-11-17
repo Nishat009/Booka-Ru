@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const { buildInvoice } = require('./invoice');
 const { runMigrations } = require('../database/migrate');
 const { seedCatalog } = require('./seed-catalog');
+const { ensureDemoAccounts } = require('./seed-demo-accounts');
 const { promisify } = require('util');
 const scrypt = promisify(crypto.scrypt);
 
@@ -33,6 +34,9 @@ const ok = (res, data = null, message = '') => res.status(200).json({ success: t
 const err = (code, message, field) => ({ code, message, ...(field ? { field } : {}) });
 const fail = (res, ...errors) => res.status(422).json({ success: false, errors: errors.flat() });
 const asyncHandler = handler => (req, res, next) => Promise.resolve(handler(req, res, next)).catch(next);
+// DEMO_MODE=true is the explicit opt-in for a public review/demo deployment; ENABLE_DEMO_LOGINS only works outside production.
+const demoAllowed = () => process.env.DEMO_MODE === 'true' || (process.env.NODE_ENV !== 'production' && process.env.ENABLE_DEMO_LOGINS === 'true');
+const DEMO_ROLES = ['admin', 'staff', 'customer'];
 
 async function startServer() {
     if (!uri) throw new Error('MONGODB_URI must be set in the server environment.');
@@ -44,6 +48,12 @@ async function startServer() {
         await seedCatalog(database)
             .then(summary => console.log(`Empty catalogue: loaded ${summary}.`))
             .catch(error => console.error('Starter catalogue seed failed:', error.message));
+    }
+    // Demo deployments: make sure the one-click Admin / Staff / Customer accounts exist.
+    if (demoAllowed()) {
+        await ensureDemoAccounts(database)
+            .then(created => created.length && console.log(`Demo mode: created the ${created.join(', ')} demo account(s).`))
+            .catch(error => console.error('Demo account setup failed:', error.message));
     }
     const books = database.collection('books');
     const orders = database.collection('orders');
@@ -115,10 +125,10 @@ async function startServer() {
         if (user.active === false) return fail(res, err('ACCOUNT_DEACTIVATED', 'This account has been deactivated. Contact an administrator.'));
         ok(res, await startSession(user));
     }));
+    // Tells the login screens whether to show the one-click demo buttons.
+    app.get('/auth/demo', (req, res) => ok(res, { enabled: demoAllowed(), roles: demoAllowed() ? DEMO_ROLES : [] }));
     app.post('/auth/demo-login/:role', asyncHandler(async (req, res) => {
-        // DEMO_MODE=true is the explicit opt-in for a public review/demo deployment; ENABLE_DEMO_LOGINS only works outside production.
-        const demoAllowed = process.env.DEMO_MODE === 'true' || (process.env.NODE_ENV !== 'production' && process.env.ENABLE_DEMO_LOGINS === 'true');
-        if (!demoAllowed)
+        if (!demoAllowed())
             return fail(res, err('DEMO_DISABLED', 'Demo sign-in is not enabled.'));
         const profiles = {
             admin: { email: adminEmail },

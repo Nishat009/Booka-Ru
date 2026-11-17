@@ -38,3 +38,7 @@
 .auth-submit { border-radius: 8px; min-height: 52px; }
 .auth-error { padding: 12px; border-radius: 8px; background: var(--accent-soft); }
 @media(max-width:760px) { .auth-page { width: min(520px,calc(100% - 32px)); margin: 26px auto 40px; grid-template-columns: 1fr; } .auth-story { padding: 28px; } .auth-back { margin-bottom: 25px; } .auth-story h2 { font-size: 2.6rem; } .auth-story img,.auth-story-footer { display: none; } .auth-story p:not(.auth-story-kicker) { margin-bottom: 0; } .auth-card { padding: 32px 26px; } }
+.demo-login-top { margin: 0 0 6px; padding: 0; border-top: 0; }
+.demo-login-or { display: flex; align-items: center; gap: 12px; margin: 20px 0 0 !important; font-weight: 500 !important; }
+.demo-login-or::before,.demo-login-or::after { content: ''; flex: 1; border-top: 1px solid var(--line); }
+.auth-switch a { color: var(--cherry); font-weight: 700; }

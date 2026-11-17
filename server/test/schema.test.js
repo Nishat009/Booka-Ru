@@ -33,6 +33,21 @@ test('every mutating route except sign-up and sign-in requires authentication', 
     }
 });
 
+test('demo mode creates only missing demo accounts and never overwrites one', async () => {
+    const { ensureDemoAccounts } = require('../seed-demo-accounts');
+    const stored = [{ email: 'owner@example.com', passwordHash: 'kept' }];
+    const database = { collection: () => ({
+        findOne: async ({ email }) => stored.find(user => user.email === email) || null,
+        insertOne: async doc => { stored.push(doc); },
+        updateOne: async () => { throw new Error('must not update an existing account'); }
+    }) };
+    const created = await ensureDemoAccounts(database, { ADMIN_EMAIL: ' Owner@Example.com ' });
+    assert.deepStrictEqual(created, ['staff', 'customer']);
+    assert.strictEqual(stored[0].passwordHash, 'kept');
+    assert.ok(stored.slice(1).every(user => /^[0-9a-f]{32}:[0-9a-f]{128}$/.test(user.passwordHash)));
+    assert.deepStrictEqual(await ensureDemoAccounts(database, { ADMIN_EMAIL: 'owner@example.com' }), []);
+});
+
 test('the invoice renders a PDF for an order', async () => {
     const { buildInvoice } = require('../invoice');
     const pdf = buildInvoice({ _id: 'test', name: 'The Hobbit', quantity: 1, price: 520, total: 520, email: 'a@example.com', customerName: 'Test', shippingAddress: 'Dhaka', status: 'new', createdAt: new Date() });

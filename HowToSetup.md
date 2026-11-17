@@ -48,6 +48,7 @@ Edit `server/.env`:
 | `DB_NAME` | `bookDB` | Database name |
 | `ADMIN_EMAIL` | `you@yourshop.com` | This email becomes the administrator |
 | `ENABLE_DEMO_LOGINS` | `false` | `true` shows one-click demo logins (development only) |
+| `DEMO_MODE` | `false` | `true` shows the one-click Admin / Staff / Customer buttons on `/login` and `/admin/login` in production. Review/demo deployment only |
 | `SEED_CATALOG_IF_EMPTY` | `false` | `true` loads the 51-book starter catalogue on start when the database has no books |
 | `DEMO_*_PASSWORD` | your own values | Only for the demo seed. 8+ characters with a number |
 
@@ -347,4 +348,4 @@ Rebuild the storefront after any change in `client/` (`npm run build`, or `docke
 | Admin menu missing after sign-up | The email does not exactly match `ADMIN_EMAIL`, or the API was not restarted after setting it. |
 | `Skipped validator ... collMod privilege` in the log | Your MongoDB user only has `readWrite`. The app works; give it `dbAdmin` and run `db:migrate` again to add the validators. |
 | Atlas connection times out | Add the server's IP (or `0.0.0.0/0`) to the Atlas network access list. |
-| Demo login buttons do nothing | They are disabled unless `ENABLE_DEMO_LOGINS=true`, and always disabled when `NODE_ENV=production`. |
+| No demo login buttons | The API decides: set `DEMO_MODE=true` on the API (review/demo deployment), or `ENABLE_DEMO_LOGINS=true` in development, and restart it. Missing demo accounts are created on start. |

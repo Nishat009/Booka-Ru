@@ -32,6 +32,7 @@
 .landing-roles p { margin: 0 0 12px; opacity: .9; }
 .landing-roles strong { display: block; }
 .landing-roles .landing-btn-primary { margin-top: 8px; background: var(--cherry); }
+.landing-roles-admin { margin: 8px 0 0 8px; border: 1px solid rgba(255, 248, 237, .4); color: #fff8ed !important; }
 .landing-footer { padding: 30px 0 50px; color: var(--muted); text-align: center; }
 @media (max-width: 860px) {
   .landing-hero, .landing-benefits { grid-template-columns: 1fr; gap: 32px; padding-top: 40px; }

@@ -71,7 +71,7 @@ Before finishing a change, run both test suites and the client build with `CI=tr
 - Wrap async handlers in `asyncHandler`.
 - **Authorisation:** every route that changes data starts with `authenticate`, then
   `allow('<permission>')` or `adminOnly`. Only `/auth/register`, `/auth/login` and
-  `/auth/demo-login/:role` are public. `server/test/schema.test.js` enforces this.
+  `/auth/demo-login/:role` are public (plus read-only `GET` routes such as `/auth/demo`). `server/test/schema.test.js` enforces this.
 - Permissions: `books:write`, `orders:manage`, `support:handle`, `reviews:moderate`,
   `users:manage`, `popups:manage`. Admin = the account whose email equals `ADMIN_EMAIL`
   and has every permission. Staff can only grant permissions they hold.
@@ -108,7 +108,8 @@ Before finishing a change, run both test suites and the client build with `CI=tr
 - Demo passwords come only from `DEMO_*_PASSWORD` env vars.
 - `ENABLE_DEMO_LOGINS` must stay `false` in production (the API also refuses when
   `NODE_ENV=production`). The only exception is a public review/demo deployment that sets
-  `DEMO_MODE=true` (API) and `REACT_APP_DEMO_LOGINS=true` (client build). Never set either on a real shop.
+  `DEMO_MODE=true` (API). Never set it on a real shop. The login screens (`/login`, `/admin/login`)
+  ask `GET /auth/demo` whether to show the buttons, and the API creates missing demo accounts on start.
 
 ## Dependencies
 

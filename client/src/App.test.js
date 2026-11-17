@@ -34,10 +34,45 @@ test('renders the Booka-Ru storefront and Dhaka map', async () => {
   expect(await screen.findByText(/the shelf is quiet for now/i)).toBeInTheDocument();
 });
 
-test('shows one-click demo buttons for every role', () => {
+const enableDemo = () => {
+  const respond = data => ({ ok: true, status: 200, json: async () => ({ success: true, message: '', data }) });
+  global.fetch = jest.fn(url => Promise.resolve(String(url).endsWith('/auth/demo')
+    ? respond({ enabled: true, roles: ['admin', 'staff', 'customer'] })
+    : respond([])));
+};
+
+test('shows one-click demo buttons for every role on the customer login', async () => {
+  enableDemo();
   window.history.pushState({}, '', '/login');
   render(<App />);
-  ['Admin', 'Staff', 'Customer'].forEach(role => expect(screen.getByRole('button', { name: new RegExp('sign in as ' + role, 'i') })).toBeInTheDocument());
+  for (const role of ['Customer', 'Admin', 'Staff'])
+    expect(await screen.findByRole('button', { name: new RegExp('sign in as ' + role, 'i') })).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: /admin panel sign-in/i }).getAttribute('href')).toBe('/admin/login');
+});
+
+test('the admin login screen has Admin and Staff demo buttons', async () => {
+  enableDemo();
+  window.history.pushState({}, '', '/admin/login');
+  render(<App />);
+  expect(screen.getByRole('heading', { name: /team sign-in/i })).toBeInTheDocument();
+  expect(await screen.findByRole('button', { name: /sign in as admin/i })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /sign in as staff/i })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /sign in as customer/i })).not.toBeInTheDocument();
+});
+
+test('the admin panel sends signed-out visitors to the admin login', async () => {
+  window.history.pushState({}, '', '/admin/orders');
+  render(<App />);
+  expect(await screen.findByRole('heading', { name: /team sign-in/i })).toBeInTheDocument();
+  expect(window.location.pathname).toBe('/admin/login');
+});
+
+test('hides the demo buttons when the API has demo logins off', async () => {
+  window.history.pushState({}, '', '/login');
+  render(<App />);
+  await screen.findByRole('heading', { name: /welcome back/i });
+  await new Promise(resolve => setTimeout(resolve, 0));
+  expect(screen.queryByRole('button', { name: /sign in as/i })).not.toBeInTheDocument();
 });
 
 test('offers email login without Google sign-in', () => {

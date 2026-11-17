@@ -28,6 +28,7 @@ const Landing = () => (
                 <p className="landing-lead">Booka-Ru is a complete bookshop you can run today: a polished storefront, secure checkout, invoices, order chat and a team desk for your staff.</p>
                 <div className="landing-cta">
                     <Link className="landing-btn landing-btn-primary" to="/login">Live Demo <span aria-hidden="true">→</span></Link>
+                    <Link className="landing-btn landing-btn-ghost" to="/admin/login">Admin Panel Demo</Link>
                     <Link className="landing-btn landing-btn-ghost" to="/home">Browse the shop</Link>
                 </div>
                 <p className="landing-note">Sign in as Admin, Staff or Customer with one click. No password needed.</p>
@@ -63,10 +64,11 @@ const Landing = () => (
                 <h3>Try every role</h3>
                 {ROLES.map(([role, text]) => <p key={role}><strong>{role}</strong>{text}</p>)}
                 <Link className="landing-btn landing-btn-primary" to="/login">Open the Live Demo <span aria-hidden="true">→</span></Link>
+                <Link className="landing-btn landing-roles-admin" to="/admin/login">Open the Admin Panel</Link>
             </div>
         </section>
 
-        <footer className="landing-footer">© Booka-Ru · <Link to="/home">Shop</Link> · <Link to="/login">Live Demo</Link></footer>
+        <footer className="landing-footer">© Booka-Ru · <Link to="/home">Shop</Link> · <Link to="/login">Live Demo</Link> · <Link to="/admin/login">Admin Demo</Link></footer>
     </div>
 );
 

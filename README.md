@@ -178,7 +178,7 @@ npm --prefix server run verify:demo-flow
 
 - ✅ No secrets committed — config comes from `.env` files (see `*.env.example` templates)
 - ✅ Demo passwords come only from `DEMO_*_PASSWORD` environment variables
-- ✅ `ENABLE_DEMO_LOGINS` is ignored when `NODE_ENV=production`
+- ✅ `ENABLE_DEMO_LOGINS` is ignored when `NODE_ENV=production`; only `DEMO_MODE=true` (a public review/demo deployment) turns one-click demo logins on there
 - ✅ All dependency versions pinned; `npm audit --omit=dev` is clean for both apps
 
 ---
