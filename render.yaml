@@ -26,8 +26,8 @@ services:
       # Demo one-click logins must stay off in production.
       - key: ENABLE_DEMO_LOGINS
         value: "false"
-      # Public review/demo deployment only: "true" enables the one-click Admin/Staff/Customer logins.
-      # Requires the demo accounts (npm run seed:demo). Keep "false" on a real shop.
+      # Public review/demo deployment only: "true" shows the one-click Admin/Staff/Customer buttons on
+      # /login and /admin/login, and creates any missing demo account on start. Keep "false" on a real shop.
       - key: DEMO_MODE
         value: "false"
       # Load the 51-book starter catalogue on start when the database has no books yet.
@@ -48,9 +48,6 @@ services:
       # Public URL of the API service above, e.g. https://booka-ru-api.onrender.com (no trailing slash).
       - key: REACT_APP_API_URL
         sync: false
-      # "true" shows the one-click demo buttons on the login page (demo deployment only).
-      - key: REACT_APP_DEMO_LOGINS
-        value: "false"
       # Optional Google Maps Embed API key; the OpenStreetMap embed is used without it.
       - key: REACT_APP_GOOGLE_MAPS_API_KEY
         sync: false

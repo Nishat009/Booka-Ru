@@ -43,6 +43,28 @@ async function run() {
   }
 }
 
-module.exports = { seedDemoAccounts };
+// Demo deployments: create any demo account that is missing so the one-click buttons always work.
+// Existing accounts are never changed. Without a DEMO_*_PASSWORD the account gets a random
+// password nobody knows, so it can only be reached through the demo button.
+async function ensureDemoAccounts(database, env = process.env) {
+  const adminEmail = String(env.ADMIN_EMAIL || '').trim().toLowerCase();
+  if (!adminEmail) throw new Error('ADMIN_EMAIL must be set.');
+  const users = database.collection('users');
+  const accounts = [
+    { email: adminEmail, name: 'Booka-Ru Test Admin', role: 'admin', permissions: ['*'], password: env.DEMO_ADMIN_PASSWORD },
+    { email: 'bookaru.staff.test@example.com', name: 'Booka-Ru Test Staff', role: 'staff', permissions: ['books:write', 'orders:manage', 'support:handle', 'reviews:moderate'], password: env.DEMO_STAFF_PASSWORD },
+    { email: 'bookaru.customer.test@example.com', name: 'Booka-Ru Test Customer', role: 'customer', permissions: [], password: env.DEMO_CUSTOMER_PASSWORD }
+  ];
+  const created = [];
+  for (const account of accounts) {
+    if (await users.findOne({ email: account.email })) continue;
+    const password = account.password || `${crypto.randomBytes(18).toString('base64url')}7`;
+    await saveAccount(users, { ...account, password });
+    created.push(account.role);
+  }
+  return created;
+}
+
+module.exports = { seedDemoAccounts, ensureDemoAccounts };
 
 if (require.main === module) run().catch(error => { console.error('Could not seed demo accounts:', error.message); process.exitCode = 1; });

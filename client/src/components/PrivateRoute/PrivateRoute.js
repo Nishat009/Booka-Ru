@@ -11,12 +11,13 @@ const PrivateRoute = ({ children, staff, ...rest }) => {
             {...rest}
             render={({ location }) =>
                 !authReady ? <div className="page-message">Checking your account…</div> : loggedInUser.email ? (
-                    staff && loggedInUser.role === 'customer' ? <Redirect to={{ pathname: '/login', state: { from: location, message: 'This area is for the Booka-Ru team.' } }} /> :
+                    staff && loggedInUser.role === 'customer' ? <Redirect to={{ pathname: '/admin/login', state: { from: location, message: 'This area is for the Booka-Ru team.' } }} /> :
                     children
                 ) : (
                     <Redirect
                         to={{
-                            pathname: "/login",
+                            // The team area has its own sign-in screen (with the Admin / Staff demo buttons).
+                            pathname: staff ? "/admin/login" : "/login",
                             state: { from: location }
                         }}
                     />

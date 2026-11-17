@@ -114,5 +114,5 @@ exercises the admin, staff and customer workflow end to end.
 - No secrets are committed. Configuration comes from `.env` files created from the
   `*.env.example` templates, which contain placeholders only.
 - Demo account passwords come only from `DEMO_*_PASSWORD` environment variables.
-- `ENABLE_DEMO_LOGINS` is ignored when `NODE_ENV=production`.
+- `ENABLE_DEMO_LOGINS` is ignored when `NODE_ENV=production`; only `DEMO_MODE=true` (a public review/demo deployment) turns the one-click demo logins on there.
 - All dependency versions are pinned; `npm audit --omit=dev` is clean for both apps.

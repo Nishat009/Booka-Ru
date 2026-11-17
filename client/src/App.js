@@ -64,6 +64,9 @@ function App() {
             <Route path="/home" exact>
               <Home />
             </Route>
+            <Route path="/admin/login" exact>
+              <Login team />
+            </Route>
             <PrivateRoute path={["/admin", "/admin/:section", "/addBook", "/manageBook"]} staff>
               <Admin />
             </PrivateRoute>

@@ -9,7 +9,12 @@ All notable changes to Booka-Ru are listed here. The format follows
 ### Added
 - Landing page at `/` (hero, key features, screenshots, benefits, Live Demo button); the shop moved to `/home`.
 - One-click Admin / Staff / Customer buttons on the login page, with role descriptions.
-- `DEMO_MODE` (API) and `REACT_APP_DEMO_LOGINS` (client build): explicit opt-in so a public demo deployment can use the demo buttons; off by default.
+- Admin panel sign-in screen at `/admin/login` with one-click Admin and Staff demo buttons; the team area redirects there. The customer login (`/login`) offers Customer, Admin and Staff, and the landing page links to both.
+- `GET /auth/demo`: the login screens show the demo buttons only when the API has them on, so `DEMO_MODE=true` on the API is the single switch for a demo deployment.
+- With demo logins on, the API creates any missing demo account at start (random password unless `DEMO_*_PASSWORD` is set); existing accounts are never changed.
+- `DEMO_MODE` in Docker Compose (`.env`).
+
+
 - `docs/covers/`: four 1280x720 marketplace cover images.
 
 ## [1.0.3] — 2026-11-07
